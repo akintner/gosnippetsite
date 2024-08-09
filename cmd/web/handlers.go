@@ -24,8 +24,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	// the http.Error() function to send an Internal Server Error response to the user, and then return from the handler so no subsequent code is executed.
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		app.logger.Error(err.Error(), "method", r.Method, "url", r.URL.RequestURI())
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		app.serverError(w, r, err)
 		return
 	}
 	// Then we use the Execute() method on the template set to write the
@@ -33,8 +32,8 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	// represents any dynamic data that we want to pass in, which for now we'll leave as nil.
 	err = ts.ExecuteTemplate(w, "base", nil)
 	if err != nil {
-		app.logger.Error(err.Error(), "method", r.Method, "url", r.URL.RequestURI())
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		app.serverError(w, r, err)
+		return
 	}
 }
 
