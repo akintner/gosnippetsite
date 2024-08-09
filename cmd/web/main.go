@@ -16,7 +16,9 @@ func main() {
 	// encountered during parsing the application will be terminated.
 	flag.Parse()
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		AddSource: true,
+	}))
 
 	mux := http.NewServeMux()
 
@@ -27,7 +29,7 @@ func main() {
 	mux.HandleFunc("GET /snippet/create", snippetCreate)
 	mux.HandleFunc("POST /snippet/create", snippetCreatePost)
 
-	logger.Info("starting server", "addr", *addr)
+	logger.Info("starting server", slog.String("addr", ":4000"))
 
 	err := http.ListenAndServe(*addr, mux)
 	logger.Error(err.Error())
