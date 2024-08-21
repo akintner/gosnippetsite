@@ -1,7 +1,7 @@
 package main
 
 import (
-	"errors"
+	// "errors"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -44,15 +44,15 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	snippet, err := app.snippets.Get(id)
-	if err != nil {
-		if errors.Is(err, models.ErrNotRecord) {
-			http.NotFound(w, r)
-		} else {
-			app.serverError(w, r, err)
-		}
-		return
-	}
+	// snippet, err := app.snippets.Get(id)
+	// if err != nil {
+	// 	if errors.Is(err, models.ErrNotRecord) {
+	// 		http.NotFound(w, r)
+	// 	} else {
+	// 		app.serverError(w, r, err)
+	// 	}
+	// 	return
+	// }
 
 	files := []string{
 		"./ui/html/base.tmpl",
@@ -66,7 +66,7 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = ts.ExecuteTemplate(w, "base", snippet)
+	err = ts.ExecuteTemplate(w, "base", id)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
