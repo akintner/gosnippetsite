@@ -17,7 +17,6 @@ type snippetCreateForm struct {
 	validator.Validator `form:"-"`
 }
 
-// Define a home handler function which writes a byte slice containing "Hello from Snippetbox" as the response body.
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	snippets, err := app.snippets.Latest()
 	if err != nil {
@@ -86,4 +85,8 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	}
 	// Redirect the user to the relevant page for the snippet.
 	http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", id), http.StatusSeeOther)
+}
+
+func ping(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
 }
