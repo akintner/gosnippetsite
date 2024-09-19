@@ -16,7 +16,7 @@ import (
 
 type application struct {
 	logger        *slog.Logger
-	snippets      *models.SnippetModel
+	snippets      *models.SnippetModelInterface
 	templateCache map[string]*template.Template
 	formDecoder   *form.Decoder
 }
@@ -54,7 +54,7 @@ func main() {
 
 	app := &application{
 		logger:        logger,
-		snippets:      &models.SnippetModel{DB: db},
+		snippets:      &models.SnippetModel,
 		templateCache: templateCache,
 		formDecoder:   formDecoder,
 	}
