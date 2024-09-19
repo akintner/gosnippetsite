@@ -7,9 +7,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
-	"akintnerlearnsgo/internal/models/mocks"
+	"akintnerlearnsgo/internal/models"
+
+	"github.com/go-playground/form/v4"
 )
 
 // Create a newTestApplication helper which returns an instance of our
@@ -20,17 +21,10 @@ func newTestApplication(t *testing.T) *application {
 		t.Fatal(err)
 	}
 	formDecoder := form.NewDecoder()
-	// And a session manager instance. Note that we use the same settings as
-	// production, except that we *don't* set a Store for the session manager.
-	// If no store is set, the SCS package will default to using a transient
-	// in-memory store, which is ideal for testing purposes.
-	sessionManager := scs.New()
-	sessionManager.Lifetime = 12 * time.Hour
-	sessionManager.Cookie.Secure = true
 
 	return &application{
 		logger:   slog.New(slog.NewTextHandler(io.Discard, nil)),
-		snippets: &mocks.SnippetModel{},
+		snippets: &models.SnippetModel{},
 		// users: &mocks.UserModel{},
 		templateCache: templateCache,
 		formDecoder:   formDecoder,
