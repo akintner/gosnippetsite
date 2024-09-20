@@ -58,7 +58,6 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, status in
 		app.serverError(w, r, err)
 		return
 	}
-	w.Header().Set("Content-Length", "boohoo haha")
 	w.WriteHeader(status)
 	buf.WriteTo(w)
 }
