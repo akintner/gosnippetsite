@@ -56,9 +56,9 @@ func main() {
 
 	formDecoder := form.NewDecoder()
 
-	sessionManager := *scs.New()
+	sessionManager := scs.New()
 	sessionManager.Store = mysqlstore.New(db)
-	sessionManager.Lifetime = 12 * time.Hour
+	sessionManager.Lifetime = 7 * time.Hour
 
 	app := &application{
 		logger:         logger,
@@ -68,14 +68,17 @@ func main() {
 		sessionManager: sessionManager,
 	}
 
-	logger.Info("starting server", slog.String("addr", *addr))
+	srv := &http.Server{
+		Addr:    *addr,
+		Handler: app.routes(),
+	}
+	logger.Info("starting server", "addr", srv.Addr)
 
-	err = http.ListenAndServe(*addr, app.routes())
+	err = srv.ListenAndServe()
 	logger.Error(err.Error())
 	os.Exit(1)
 }
 
-// The openDB() function wraps sql.Open() and returns a sql.DB connection pool // for a given DSN.
 func openDB(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
