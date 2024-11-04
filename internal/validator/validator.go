@@ -29,7 +29,7 @@ func (v *Validator) AddFieldError(key, message string) {
 	}
 }
 
-func (v *Validator) AddNonFieldError(key, message string) {
+func (v *Validator) AddNonFieldError(message string) {
 	v.NonFieldErrors = append(v.NonFieldErrors, message)
 }
 

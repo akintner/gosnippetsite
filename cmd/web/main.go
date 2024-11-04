@@ -110,5 +110,19 @@ func openDB(dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
+func (app *application) requireAuthentication(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !app.isAuthenticated(r) {
+			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+			return
+		}
+		// Otherwise set the "Cache-Control: no-store" header so that pages
+		// require authentication are not stored in the users browser cache (or other intermediary cache).
+		w.Header().Add("Cache-Control", "no-store")
+		// And call the next handler in the chain.
+		next.ServeHTTP(w, r)
+	})
+}
+
 // mysql -D snippetbox -u web -p
 // go run ./cmd/web/
