@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/justinas/nosurf"
 )
 
 func commonHeaders(next http.Handler) http.Handler {
@@ -29,6 +31,16 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 		app.logger.Info("received request", "ip", ip, "proto", proto, "method", method, "uri", uri)
 		next.ServeHTTP(w, r)
 	})
+}
+
+func noSurf(next http.Handler) http.Handler {
+	crsfHandler := nosurf.New(next)
+	crsfHandler.SetBaseCookie(http.Cookie{
+		HttpOnly: true,
+		Path:     "/",
+		Secure:   true,
+	})
+	return crsfHandler
 }
 
 func (app *application) recoverPanic(next http.Handler) http.Handler {

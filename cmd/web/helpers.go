@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/go-playground/form/v4"
+	"github.com/justinas/nosurf"
 )
 
 func (app *application) decodePostForm(r *http.Request, dst any) error {
@@ -67,6 +68,7 @@ func (app *application) newTemplateData(r *http.Request) templateData {
 		CurrentYear:     time.Now().Year(),
 		Flash:           app.sessionManager.PopString(r.Context(), "flash"),
 		isAuthenticated: app.isAuthenticated(r),
+		CRSFToken:       nosurf.Token(r),
 	}
 }
 
