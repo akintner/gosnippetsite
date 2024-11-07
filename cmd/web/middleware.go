@@ -75,10 +75,10 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 		}
 		// If a matching user is found, we know that the request is
 		// coming from an authenticated user who exists in our database. We
-		// create a new copy of the request (with an isAuthenticatedContextKey value of
+		// create a new copy of the request (with an IsAuthenticatedContextKey value of
 		//true in the request context) and assign it to r.
 		if exists {
-			ctx := context.WithValue(r.Context(), isAuthenticatedContextKey, true)
+			ctx := context.WithValue(r.Context(), IsAuthenticatedContextKey, true)
 			r = r.WithContext(ctx)
 		}
 		// Call the next handler in the chain.

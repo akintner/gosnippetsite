@@ -67,15 +67,15 @@ func (app *application) newTemplateData(r *http.Request) templateData {
 	return templateData{
 		CurrentYear:     time.Now().Year(),
 		Flash:           app.sessionManager.PopString(r.Context(), "flash"),
-		isAuthenticated: app.isAuthenticated(r),
+		IsAuthenticated: app.IsAuthenticated(r),
 		CRSFToken:       nosurf.Token(r),
 	}
 }
 
-func (app *application) isAuthenticated(r *http.Request) bool {
-	isAuthenticated, ok := r.Context().Value(isAuthenticatedContextKey).(bool)
+func (app *application) IsAuthenticated(r *http.Request) bool {
+	IsAuthenticated, ok := r.Context().Value(IsAuthenticatedContextKey).(bool)
 	if !ok {
 		return false
 	}
-	return isAuthenticated
+	return IsAuthenticated
 }
