@@ -7,9 +7,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
-	"akintnerlearnsgo/internal/models"
+	"akintnerlearnsgo/internal/models/mocks"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
 )
 
@@ -22,13 +24,17 @@ func newTestApplication(t *testing.T) *application {
 	}
 	formDecoder := form.NewDecoder()
 
+	sessionManager := *scs.New()
+	sessionManager.Lifetime = 12 * time.Hour
+	sessionManager.Cookie.Secure = true
+
 	return &application{
-		logger:   slog.New(slog.NewTextHandler(io.Discard, nil)),
-		snippets: &models.SnippetModel{},
-		// users: &mocks.UserModel{},
-		templateCache: templateCache,
-		formDecoder:   formDecoder,
-		// sessionManager: sessionManager,
+		logger:         slog.New(slog.NewTextHandler(io.Discard, nil)),
+		snippets:       &mocks.SnippetModel{},
+		users:          &mocks.UserModel{},
+		templateCache:  templateCache,
+		formDecoder:    formDecoder,
+		sessionManager: sessionManager,
 	}
 }
 
